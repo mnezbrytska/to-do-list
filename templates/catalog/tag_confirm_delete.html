@@ -1,4 +1,4 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
 
 {% block content %}
 <h1>Delete Tag</h1>
@@ -6,6 +6,6 @@
 <form method="post">
     {% csrf_token %}
     <button type="submit">Yes, delete</button>
-    <a href="{% url 'catalog:index' %}">Cancel</a>
+    <a href="{% url "catalog:index" %}">Cancel</a>
 </form>
 {% endblock %}
