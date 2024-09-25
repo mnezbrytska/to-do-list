@@ -1,0 +1,111 @@
+{#{% extends 'base.html' %}#}
+{##}
+{#{% block content %}#}
+{#<h1>Todo List#}
+{##}
+{#<a href="{% url 'catalog:task-create' %}" class="btn btn-primary link-to-page">Add New Task</a>#}
+{#</h1>#}
+{#<ul>#}
+{#    {% for task in tasks %}#}
+{#    <li>#}
+{#        <strong>{{ task.content }}</strong> ({{ task.created_at }})#}
+{#        #}
+{#        {% if task.deadline %}#}
+{#            - Deadline: {{ task.deadline }}#}
+{#        {% endif %}#}
+{#        <br>#}
+{##}
+{#        {% if task.tags.all %}#}
+{#            Tags: {{ task.tags.all|join:", " }}#}
+{#        {% endif %}#}
+{#        <br>#}
+{##}
+{#        {% if task.is_done %}#}
+{#            <span style="color:green;">Completed</span>#}
+{#            <form method="post" #}
+{#                  action="{% url 'catalog:task-change-complete' task.pk %}" #}
+{#                  class="btn btn-primary link-to-page">#}
+{#                {% csrf_token %}#}
+{#                <button type="submit">Undo</button>#}
+{#            </form>#}
+{#        {% else %}#}
+{#            <span style="color:red;">Not Completed</span>#}
+{#            <form method="post" #}
+{#                  action="{% url 'catalog:task-change-complete' task.pk %}" #}
+{#                  style="display:inline;">#}
+{#                {% csrf_token %}#}
+{#                <button type="submit">Complete</button>#}
+{#            </form>#}
+{#        {% endif %}#}
+{#        <br>#}
+{##}
+{#        <a href="{% url 'catalog:task-update' task.pk %}">Edit</a>#}
+{#        <a href="{% url 'catalog:task-delete' task.pk %}">Delete</a>#}
+{#    </li>#}
+{#    {% endfor %}#}
+{#</ul>#}
+{#{% endblock %}#}
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+        <div class="col-sm-10">
+            
+            <h1>TODO list</h1>            
+           
+            <a href="{% url 'catalog:task-create' %}" class="btn btn-primary mb-3">Add task</a>
+            
+       
+            <ul class="list-group">
+                {% for task in tasks %}
+                <li class="list-group-item">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+
+                            <strong>{{ task.content }}</strong>
+                            {% if not task.is_done %}
+                                <span class="text-danger">Not done</span>
+                            {% else %}
+                                <span class="text-success">Done</span>
+                            {% endif %}
+                            <br>
+
+                            <small>Created: {{ task.created_at|date:"F j, Y, g:i a" }}</small>
+                            {% if task.deadline %}
+                                <br><small>Deadline: {{ task.deadline|date:"F j, Y, g:i a" }}</small>
+                            {% endif %}
+                            <br>
+
+                            {% if task.tags.all %}
+                                Tags: {{ task.tags.all|join:", " }}
+                            {% endif %}
+                        </div>
+
+                        <div>
+                            {% if not task.is_done %}
+                                <form method="post" action="{% url 'catalog:task-change-complete' task.pk %}" class="d-inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-success btn-sm">Complete</button>
+                                </form>
+                            {% else %}
+                                <form method="post" action="{% url 'catalog:task-change-complete' task.pk %}" class="d-inline-block">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-secondary btn-sm">Undo</button>
+                                </form>
+                            {% endif %}
+                            
+                            <a href="{% url 'catalog:task-update' task.pk %}" class="btn btn-link btn-sm">Update</a>
+                            <a href="{% url 'catalog:task-delete' task.pk %}" class="btn btn-link btn-sm">Delete</a>
+                        </div>
+                    </div>
+                </li>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+</div>
+{% endblock %}
+
