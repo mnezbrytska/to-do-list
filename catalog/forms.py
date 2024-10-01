@@ -10,6 +10,7 @@ class TaskForm(forms.ModelForm):
             "deadline": forms.DateTimeInput(attrs={"type": "datetime-local"}),
         }
 
+
 class TagForm(forms.ModelForm):
     class Meta:
         model = Tag
