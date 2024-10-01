@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>TODO list</h1>
+
+<div style="text-align: right; margin-bottom: 20px;">
+    <a href="{% url 'catalog:task-create' %}" 
+       class="btn btn-primary">Add task</a>
+</div>
+
+<ul class="list-unstyled">
+    {% for task in tasks %}
+    <li style="border-bottom: 1px solid #ddd; padding: 15px 0;">
+        <div style="display: 
+        flex; justify-content: space-between; align-items: center;">
+
+            <div>
+                <strong>{{ task.content }}</strong>
+                {% if task.is_done %}
+                    <span style="color:green;">Done</span>
+                {% else %}
+                    <span style="color:red;">Not done</span>
+                {% endif %}
+                <br>
+                
+
+                <small>Created: 
+                  {{ task.created_at|date:"F j, Y, g:i a" }}</small>
+                {% if task.deadline %}
+                    <br><small>Deadline: 
+                  {{ task.deadline|date:"F j, Y, g:i a" }}</small>
+                {% endif %}
+                <br>
+
+                {% if task.tags.all %}
+                    Tags: {{ task.tags.all|join:", " }}
+                {% endif %}
+                <br>
+
+                <a href="{% url 'catalog:task-update' task.pk %}">Update</a>
+                <a href="{% url 'catalog:task-delete' task.pk %}" 
+                   style="color:red;">Delete</a>
+            </div>
+
+            <div>
+                <form method="post" 
+                      action="
+{% url 'catalog:task-change-complete' task.pk %}" 
+                      style="display:inline;">
+                    {% csrf_token %}
+                    {% if task.is_done %}
+                        <button type="submit" class="btn btn-secondary">
+                          Undo</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-success">
+                          Complete</button>
+                    {% endif %}
+                </form>
+            </div>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,16 @@
+body {
+    margin-top: 20px;
+}
+
+.link-to-page {
+    float: right;
+    margin: 0 2px 0 2px;
+}
+ul.list-unstyled {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 15px;
+}
